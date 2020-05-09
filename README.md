@@ -8,7 +8,7 @@ The script "download_springer"  downloads over 350 pdf books directly into path 
 
 The first task here was consturcting a downloadable url from doi's in this spreadsheet https://resource-cms.springernature.com/springer-cms/rest/v1/content/17858272/data/. After that step, I tested two ways of downloading the books: (a) Perl's own getstore  and  (b) the system's curl.
 
-As expected, getstore is much faster. However, neither option tends to download all books. This could be due to timeout setting that I intend not to delev into due to other time commitments.
+As expected, getstore is much faster. However, neither option tends to download all books. This could be due to timeout setting that I do not intend to work on soon due to other time commitments.
 
 As a solution to incomplete downloading, the script is made to save the book names and constructed url's into a plain text file called "url_list" in the same directory (~/Download/Springer_Books/). This list will be used by another script called  "force_download" to complete the download.
 
