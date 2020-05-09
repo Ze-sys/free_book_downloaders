@@ -38,4 +38,4 @@ run the script "force_download" as
 If it complains, try giving it permission as  may have done for the first script and try again.
 Remember this script won't have the information it needs if you run it before the first script (i.e., download_springer)
 
-Let me know if you have questions. 
+I hope some will find this useful. 
