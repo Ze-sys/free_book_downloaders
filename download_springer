@@ -1,0 +1,89 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+use LWP::Simple;
+use LWP::Curl;
+use Spreadsheet::XLSX;
+use Text::Iconv;
+use Time::HiRes qw( time );
+use File::Basename;
+use Term::ANSIColor qw(:constants);
+
+my $converter = Text::Iconv->new( "utf-8", "windows-1252" );
+my $doi;
+my $new_url;
+my $book;
+my $last;
+my $cell;
+my $col;
+my $row;
+my $sheet;
+my $excel;
+my $book_name;
+my $title;
+my $fh;
+my $download_location = glob('~/Downloads/Springer_Books/');
+
+#create the above folder if it does not exist
+qx(mkdir -p  '$download_location' );
+open( $fh, ">", $download_location . 'url_list' )
+  or die "Can't open > $download_location.'url_list': $!";
+
+#Use Spreadsheet::XLSX package to read .xlsx file  that has the details of Springer books
+eval {
+    $excel = Spreadsheet::XLSX->new(
+        $download_location . 'Free+English+textbooks.xlsx', $converter );
+};
+die "Unable to read the excel file. Error: " . $@ if ($@);
+
+my $t0 = time();
+
+foreach $sheet ( @{ $excel->{Worksheet} } ) {
+    $sheet->{MaxRow} ||= $sheet->{MinRow};
+    foreach $row ( $sheet->{MinRow} .. $sheet->{MaxRow} ) {
+        $sheet->{MaxCol} ||= $sheet->{MinCol};
+        foreach $col ( $sheet->{MinCol} .. $sheet->{MaxCol} ) {
+            $cell = $sheet->{Cells}[$row][$col];
+            if ( $col == 17 )
+            { # <--- go to the doi column and  mauplate it to get a downloadable link as follows
+                $title     = $sheet->{Cells}[$row][0];
+                $book_name = $title->{Val} . '.pdf';
+                $book_name =~
+                  s/[\s,\,,\:]/\_/g;    # replace white spaces in titiles with _
+                $doi = $cell->{Val};
+                $doi =~ s/doi\.org/link\.springer\.com\/content\/pdf/;
+                $doi =~ s/http/https\:/;
+                $last = $doi =~ m/([^\/]+)$/
+                  ; # get the book specific string (the string after the last forward slash of the doi)
+                $book    = $1;
+                $new_url = $doi;
+                $new_url =~ s/10.1007\//10.1007\/$book\.pdf\/10.1007\//
+                  ; # do all the substitutions to the doi to construct the new downloadable url
+                $new_url =~ s/://;
+                ## now downloading the books using the new url you just created: I tested two ways of downloading: Perl's own getstore  and  the system's curl. As expected,  getstore is much faster.
+                print YELLOW, "$new_url\n", RESET;
+                print GREEN, "downloading... $book_name using above url\n",
+                  RESET;
+                print "\n";
+                printf $fh "%s %s\n", $book_name, $new_url
+                  ;  # this is for later use if  a website is not responding now
+                if ( $row =~ 0 ) {    # first row is just headers
+                    getstore( $new_url, $download_location . $book_name )
+                      ;               #  using perl itself
+                     # system "curl $new_url -o $download_location$book_name"; # using curl but this appeared slower
+                    print "\n";
+                }
+            }
+
+        }
+
+    }
+
+}
+
+close($fh);
+my $tf  = time();
+my $t_d = ( $tf - $t0 ) / 60;    # TIME IN MINS
+
+print GREEN, "Total download time...\n", RESET;
+printf( "%.4f \t %s\n", $t_d, "minutes" );

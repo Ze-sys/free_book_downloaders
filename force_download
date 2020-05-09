@@ -1,0 +1,34 @@
+#!/bin/bash
+# this script  reads the url_list file line by line and pass arguments to the curl command for downloading free Springer books
+filename="url_list"
+dirname="/Downloads/Springer_Books/"
+currentdir=$(pwd) 2>&1
+currentdir_split=${currentdir//\// }
+Home=$(echo $currentdir_split | cut -d' ' -f 1)
+current_user=$(echo $currentdir_split | cut -d' ' -f 2)  
+file_path=/$Home/$current_user$dirname$filename 
+
+echo "$file_path"
+# remove the colon for parsing convieience then replace it back
+
+perl -i -p -e  "s/:/\_colon\_/g" $file_path
+
+OUTPUT=$( wc -l $file_path)
+LINE_COUNT=(${OUTPUT// / })
+link_count=`expr $LINE_COUNT - 1`
+#echo  "you have $link_count free books to download"
+echo " "
+header=$(sed -n 1p  $file_path)
+for K in `seq 2 $LINE_COUNT`;
+  do
+    line=$(sed -n ${K}p $file_path)
+    IFS=':';  columns=($line); unset IFS;
+    book_title=$(echo $columns| cut -d ' ' -f 1)
+    book_urls=$(echo $columns| cut -d ' ' -f 2) 
+    # now replace the colon to each url
+    book_url=${book_urls/\_colon\_/\:} 
+    curl $book_url '-o' $book_title
+echo $book_url
+done
+#echo "Download completed."
+
