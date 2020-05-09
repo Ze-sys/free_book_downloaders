@@ -1,12 +1,35 @@
 # free_book_downloaders
 
-# this script downloads the free books Springer provided directly into path ~/Download/Springer_Books/ on a Linux machine. It should work fine on a windows machine with minor adjustments.
-                              ## The main task here was consturcting a downloadable url from doi's. After that step, I tested two ways of downloading: (a) Perl's own getstore  and  (b) the system's curl. 
-                              ## As expected, getstore is much faster. However, neither tends to download all books. This could be due to timeout setting, that I intend not to delev due to other time commitments.
-                              ## As a solution In order to download all books, I am saving the book names and url's  in a plain text file called "url_list" and saving it in the same directory as the books are being downloaded so I can use its contnts with curl later. 
-                              ## Update: Using the url_list file I was able to download a lot more (381 vs 67) books. The shell script I used for this task is called "force_download". 
+Two scripts are provided to help download the free books Springer provided free of charge during the COVID-19 lockdown. Thanks Springer.
 
-##USAGE: Simply run the script as ./download_springer
-        ## if you waould like to use the script force_download, do the same thing. But remember this script won't have the information it needs if you run it before the first script (i.e., download_springer)
-## This script is inspired by more elaborate and probably more elegant python script by Alex (https://github.com/alexgand/springer_free_books). There's also R based script somewhere. 
-## I just love keeping my Perl skill alive and love exploring things, espicially at this time where I cannot play or watch sports.
+#download_springer
+
+The script "download_springer"  downloads over 350 pdf books directly into path ~/Download/Springer_Books/ on a Linux machine. It should work fine on a windows machine with minor adjustments. However, there are probably easier alternatives for windows os users. 
+
+The first task here was consturcting a downloadable url from doi's in this spreadsheet https://resource-cms.springernature.com/springer-cms/rest/v1/content/17858272/data/. After that step, I tested two ways of downloading the books: (a) Perl's own getstore  and  (b) the system's curl.
+
+As expected, getstore is much faster. However, neither option tends to download all books. This could be due to timeout setting that I intend not to delev into due to other time commitments.
+
+As a solution to incomplete downloading, the script is made to save the book names and constructed url's into a plain text file called "url_list" in the same directory (~/Download/Springer_Books/).
+
+#force_download
+This is a bash script but it has a perl command inside to manuplate some strings.
+
+Using the "url_list" file I was able to download a lot more (381 vs 67) books. 
+
+#USAGE: 
+First go to where you downloaded the scripts and run the script "download_springer" as
+./download_springer
+If it complains, try giving it permission by typing:  
+chmod +x download_springer 
+in your terminal and try again. 
+If you need to install dependancies, follow the output on your screen to guid you install them.
+
+If all goes well, check if all the books are downloaded. If yes, that's it. Happy reading. If the download is incomplete, follow the next simple step.
+
+run the script "force_download" as
+./download_springer
+
+If it complains, try giving it permission as  may have done for the first script and try again.
+Remember this script won't have the information it needs if you run it before the first script (i.e., download_springer)
+Let me know if you need help. 
