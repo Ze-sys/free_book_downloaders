@@ -19,18 +19,22 @@ Using the "url_list" file I was able to download a lot more (381 vs 67) books.
 
 # USAGE: 
 First go to where you downloaded the scripts and run the script "download_springer" as
+```
 ./download_springer
+```
 If it complains, try giving it permission by typing:  
+```
 chmod +x download_springer 
+```
 in your terminal and try again. 
 If you need to install dependancies, follow the output on your screen to guid you install them.
 
 If all goes well, check if all the books are downloaded. If yes, that's it. Happy reading. If the download is incomplete, follow the next simple step.
 
 run the script "force_download" as
-
+```
 ./download_springer
-
+```
 If it complains, try giving it permission as  may have done for the first script and try again.
 Remember this script won't have the information it needs if you run it before the first script (i.e., download_springer)
 
