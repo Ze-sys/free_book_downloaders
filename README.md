@@ -6,7 +6,7 @@ Two scripts are provided to help download the free books Springer provided durin
 
 The script "download_springer"  downloads over 350 pdf books directly into path ~/Download/Springer_Books/ on a Linux machine. It should work fine on a windows machine with minor adjustments. However, there are probably easier alternatives for windows users. 
 
-The first task here was consturcting a downloadable url from doi's in this spreadsheet https://resource-cms.springernature.com/springer-cms/rest/v1/content/17858272/data/. After that step, I tested two ways of downloading the books: (a) Perl's own getstore  and  (b) the system's curl.
+The first task here was consturcting a downloadable url from doi's in this spreadsheet https://resource-cms.springernature.com/springer-cms/rest/v1/content/17858272/data/. When you click on this link it downloads a spreadsheet named "Free+English+textbooks.xlsx". I tested two ways of downloading the books: (a) Perl's own getstore  and  (b) the system's curl.
 
 As expected, getstore is much faster. However, neither option tends to download all books. This could be due to timeout setting that I do not intend to work on soon due to other time commitments.
 
@@ -38,4 +38,4 @@ run the script "force_download" as
 If it complains, try giving it permission as  may have done for the first script and try again.
 Remember this script won't have the information it needs if you run it before the first script (i.e., download_springer)
 
-I hope some will find this useful. 
+I hope someone will find this useful. 
