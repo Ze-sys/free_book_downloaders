@@ -13,9 +13,7 @@ As expected, getstore is much faster. However, neither option tends to download 
 As a solution to incomplete downloading, the first script is made to save the book names and constructed url's into a plain text file called "url_list" in the same directory (~/Downloads/Springer_Books/). This list will be used by another script called  "force_download" to complete the download.
 
 # force_download
-This is a bash script but it has a perl command inside to manipulate some strings.
-
-Using the "url_list" file I was able to download a lot more books. 
+This is a bash script but it has a perl command inside to manipulate some strings. As the name implies, it forces all the stalled downloads to complete by using the "url_list" file. 
 
 # USAGE: 
 First go to where you downloaded the scripts and run the script "download_springer" as
