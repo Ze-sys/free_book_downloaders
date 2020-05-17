@@ -30,5 +30,5 @@ for K in `seq 2 $LINE_COUNT`;
     curl $book_url '-o' $book_title
 echo $book_url
 done
-#echo "Download completed."
+echo "Download completed."
 
